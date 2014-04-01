@@ -3,12 +3,14 @@ package main.java;
 import static spark.Spark.*;
 import spark.*;
 import spark.template.velocity.VelocityRoute;
-import java.util.*;
 
+import java.util.*;
 
 public class Runner {
 
 	public static void main(String[] args) {
+		staticFileLocation("/public");
+		org.apache.log4j.BasicConfigurator.configure();
 		// TODO Auto-generated method stub
 		get(new Route("/") {
 	         @Override
