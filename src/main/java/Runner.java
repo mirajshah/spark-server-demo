@@ -9,15 +9,30 @@ import java.util.*;
 public class Runner {
 
 	public static void main(String[] args) {
-		staticFileLocation("/public");
+		/*
+		 * Initial configuration:
+		 * Set static file directory to assets directory (under resources)
+		 * Set up basic logging
+		 */
+		staticFileLocation("/assets");
 		org.apache.log4j.BasicConfigurator.configure();
-		// TODO Auto-generated method stub
+		
+		
 		get(new Route("/") {
 	         @Override
 	         public Object handle(Request request, Response response) {
 	            return "Hello World!";
 	         }
 	      });
+		
+		get(new VelocityRoute("/home") {
+            @Override
+            public Object handle(final Request request, final Response response) {
+                Map<String, Object> model = new HashMap<>();
+                model.put("status", "Yes!");
+                return modelAndView(model, "home.wm");
+            }
+        });
 		
 		get(new JsonTransformerRoute("/hello") {
 		    @Override
@@ -36,6 +51,15 @@ public class Runner {
                 return modelAndView(model, "hello.wm");
             }
         });
+		
+		get(new JsonTransformerRoute("/clickme") {
+			@Override
+			public Object handle(Request request, Response response) {
+				response.type("application/json");
+				return new MyMessage(Double.toString(Math.random()));
+			}
+			
+		});
 	}
 
 }
